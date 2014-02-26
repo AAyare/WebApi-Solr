@@ -18,6 +18,7 @@ namespace Evoke.Rnd.Solr.Api.Controllers
         // GET api/values/5
         public string Get(int id)
         {
+            //test test check in test
             return "value";
         }
 
