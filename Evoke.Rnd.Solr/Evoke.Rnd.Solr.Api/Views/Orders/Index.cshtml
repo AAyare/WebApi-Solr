@@ -1,8 +1,65 @@
-﻿@model dynamic
+﻿@model IEnumerable<Evoke.Rnd.Solr.Api.Models.ModelRepository.Order>
 
 @{
-    ViewBag.Title = "title";
-    Layout = "_Layout";
+    Layout = null;
 }
 
-<h2>title</h2>
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+    <table>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.OrderedItem)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OrderedQuantity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UnitPrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TotalPrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CustomerId)
+            </th>
+            <th></th>
+        </tr>
+    
+    @foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.OrderedItem)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OrderedQuantity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UnitPrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TotalPrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CustomerId)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id=item.OrderId }) |
+                @Html.ActionLink("Details", "Details", new { id=item.OrderId }) |
+                @Html.ActionLink("Delete", "Delete", new { id=item.OrderId })
+            </td>
+        </tr>
+    }
+    
+    </table>
+</body>
+</html>

@@ -4,56 +4,67 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Linq;
 using System.Web;
+using System.Web.Providers.Entities;
+using Evoke.Rnd.Solr.Api.Models.ModelRepository;
 
 namespace Evoke.Rnd.Solr.Api.Models
 {
     public class SalesContext : DbContext
     {
-        public DbSet<ModelRepository.Customer> Customers { get; set; }
-        public DbSet<ModelRepository.Order> Orders { get; set; }
+        public DbSet<Customer> Customers { get; set; }
+        public DbSet<Order> Orders { get; set; }
+
+        public SalesContext()
+        {
+        }
 
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+
+            modelBuilder.Entity<Order>().ToTable("Order");
+;
+            modelBuilder.Entity<Customer>().ToTable("Customer");
+            
             //primary key for customerid
-            modelBuilder.Entity<ModelRepository.Customer>().HasKey(c => c.CustomerId);
+            modelBuilder.Entity<Customer>().HasKey(c => c.CustomerId);
 
             //identity key for customerid
-            modelBuilder.Entity<ModelRepository.Customer>()
+            modelBuilder.Entity<Customer>()
                         .Property(c => c.CustomerId)
                         .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
             //maxlenght(similar to varchar )
-            modelBuilder.Entity<ModelRepository.Customer>().Property(c =>
+            modelBuilder.Entity<Customer>().Property(c =>
                                                                      c.CustomerName).HasMaxLength(80);
-            modelBuilder.Entity<ModelRepository.Customer>().Property(c =>
+            modelBuilder.Entity<Customer>().Property(c =>
                                                                      c.Address).HasMaxLength(100);
-            modelBuilder.Entity<ModelRepository.Customer>().Property(c =>
+            modelBuilder.Entity<Customer>().Property(c =>
                                                                      c.MobileNo).HasMaxLength(14);
-            modelBuilder.Entity<ModelRepository.Customer>().Property(c =>
+            modelBuilder.Entity<Customer>().Property(c =>
                                                                      c.PhoneNo).HasMaxLength(20);
-            modelBuilder.Entity<ModelRepository.Customer>().Property(c => c.City).HasMaxLength(40);
-            modelBuilder.Entity<ModelRepository.Customer>().Property(c =>
+            modelBuilder.Entity<Customer>().Property(c => c.City).HasMaxLength(40);
+            modelBuilder.Entity<Customer>().Property(c =>
                                                                      c.District).HasMaxLength(40);
-            modelBuilder.Entity<ModelRepository.Customer>().Property(c => c.State).HasMaxLength(20);
+            modelBuilder.Entity<Customer>().Property(c => c.State).HasMaxLength(20);
 
             //primary key for order table
-            modelBuilder.Entity<ModelRepository.Order>().HasKey(o => o.OrderId);
+            modelBuilder.Entity<Order>().HasKey(o => o.OrderId);
           
             //identity key for order id 
-            modelBuilder.Entity<ModelRepository.Order>().Property(o =>
+            modelBuilder.Entity<Order>().Property(o =>
                                                                   o.OrderId)
                         .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             
-            modelBuilder.Entity<ModelRepository.Order>().Property(o =>
+            modelBuilder.Entity<Order>().Property(o =>
                                                                   o.OrderedItem).HasMaxLength(50);
-           
-            modelBuilder.Entity<ModelRepository.Order>().HasRequired(c => c.Customer)
-                        .WithMany(o => o.Orders).HasForeignKey(o => o.CustomerId);
-           
-            modelBuilder.Entity<ModelRepository.Order>()
+
+            modelBuilder.Entity<Order>().HasRequired(c => c.Customer)
+                        .WithMany(o => o.Orders ?? null).HasForeignKey(o => o.CustomerId);
+
+            modelBuilder.Entity<Order>()
                         .HasRequired(c => c.Customer)
-                        .WithMany(o => o.Orders)
+                        .WithMany(o => o.Orders ?? null)
                         .HasForeignKey(o => o.CustomerId)
                         .WillCascadeOnDelete(true);
             base.OnModelCreating(modelBuilder);

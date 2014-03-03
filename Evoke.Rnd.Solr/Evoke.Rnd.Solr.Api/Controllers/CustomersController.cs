@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Evoke.Rnd.Solr.Api.Models;
+using Evoke.Rnd.Solr.Api.Models.ModelRepository;
+
 namespace Evoke.Rnd.Solr.Api.Controllers
 {
     public class CustomersController : Controller
@@ -24,12 +26,12 @@ namespace Evoke.Rnd.Solr.Api.Controllers
 
         public ActionResult Create()
         {
-            var customer = new ModelRepository.Customer();
+            var customer = new Customer();
             return View(customer);
         }
 
         [HttpPost]
-        public ActionResult Create(ModelRepository.Customer cust )
+        public ActionResult Create(Customer cust )
         {
             _objContext.Customers.Add(cust);
             _objContext.SaveChanges();
@@ -42,7 +44,7 @@ namespace Evoke.Rnd.Solr.Api.Controllers
             return View(cust);
         }
         [HttpPost]
-        public ActionResult Delete(int id, ModelRepository.Customer cust)
+        public ActionResult Delete(int id, Customer cust)
         {
             var customer = _objContext.Customers.First(c => c.CustomerId == id);
             if (customer != null)

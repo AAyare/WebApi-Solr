@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Evoke.Rnd.Solr.Api.Models;
+using Evoke.Rnd.Solr.Api.Models.ModelRepository;
 
 namespace Evoke.Rnd.Solr.Api.Controllers
 {
@@ -25,11 +26,11 @@ namespace Evoke.Rnd.Solr.Api.Controllers
 
         public ActionResult Create()
         {
-            var order = new ModelRepository.Order();
+            var order = new Order();
             return View(order);
         }
         [HttpPost]
-        public ActionResult Create(ModelRepository.Order ord)
+        public ActionResult Create(Order ord)
         {
             _objContext.Orders.Add(ord);
             _objContext.SaveChanges();
@@ -38,11 +39,11 @@ namespace Evoke.Rnd.Solr.Api.Controllers
 
         public ActionResult Delete(int id)
         {
-            var Order = _objContext.Orders.First(o => o.OrderId == id);
-            return View(Order);
+            var order = _objContext.Orders.First(o => o.OrderId == id);
+            return View(order);
         }
         [HttpPost]
-        public ActionResult Delete(int id, ModelRepository.Order ord)
+        public ActionResult Delete(int id, Order ord)
         {
             var order = _objContext.Orders.First(o => o.OrderId == id);
             if (order != null)
