@@ -14,6 +14,7 @@ namespace Evoke.Rnd.Solr.Api.Controllers
         //
         // GET: /Users/
         UsersDataContext _dataContext = new UsersDataContext();
+        
         public ActionResult Index()
         {
             Mapper.CreateMap<User,Users>();
@@ -24,13 +25,51 @@ namespace Evoke.Rnd.Solr.Api.Controllers
             {
                 foreach (var user in userDetails)
                 {
-                    Evoke.Rnd.Solr.Api.Models.Users userModel =
-                        Mapper.Map<Evoke.Rnd.Solr.Api.User, Evoke.Rnd.Solr.Api.Models.Users>(user);
+                    Users userModel = Mapper.Map<User, Users>(user);
                     users.Add(userModel);
                 }
             }
 
             return View(users);
+        }
+
+        public ActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Create(Users userDetails)
+        {
+            try
+            {
+                Mapper.CreateMap<Users, User>();
+                var user = Mapper.Map<Users, User>(userDetails);
+                _dataContext.Users.InsertOnSubmit(user);
+                _dataContext.SubmitChanges();
+                return RedirectToAction("Index");
+            }
+            catch (Exception)
+            {
+                return View();
+            }
+        }
+      
+        public ActionResult Edit(int? userid)
+        {
+            Mapper.CreateMap<User, Users>();
+            var userDetails = _dataContext.Users.FirstOrDefault(a => a.UserId == userid);
+            var user = Mapper.Map<User, Users>(userDetails);
+            _dataContext.SubmitChanges();
+            return View(user);
+        }
+
+        public ActionResult Delete(int? userid)
+        {
+            Mapper.CreateMap<User, Users>();
+            var userDetails = _dataContext.Users.FirstOrDefault(a => a.UserId == userid);
+            var user = Mapper.Map<User, Users>(userDetails);
+            return View(user);
         }
 
     }
